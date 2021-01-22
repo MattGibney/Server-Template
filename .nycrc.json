@@ -1,0 +1,19 @@
+{
+  "all": true,
+  "check-coverage": true,
+  "include": [
+    "src/**/*.js"
+  ],
+  "exclude": [
+    "migrations", 
+    "test", 
+    "coverage", 
+    "process.config.js",
+    "src/app.js",
+    "src/routes"
+  ],
+  "branches": 0,
+  "lines": 0,
+  "functions": 0,
+  "statements": 0
+}
