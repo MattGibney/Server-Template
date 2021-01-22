@@ -12,15 +12,15 @@
 /**
  * @typedef {import('express').Request & _CampaignRequest} CampaignRequest
  */
+const express = require('express');
+const winston = require('winston');
+const expressWinston = require('express-winston');
+const { v4: uuidv4 } = require('uuid');
+const cors = require('cors');
+
+const apiRouter = require('./router');
 
 module.exports = (Config) => {
-  const express = require('express');
-  const winston = require('winston');
-  const expressWinston = require('express-winston');
-  const { v4: uuidv4 } = require('uuid');
-
-  const apiRouter = require('./router');
-
   const app = express();
 
   const logger = winston.createLogger({
@@ -68,7 +68,40 @@ module.exports = (Config) => {
     }
   );
 
+  app.use(
+    cors({
+      origin(origin, callback) {
+        if (
+          Config.corsOriginWhitelist.indexOf(origin) !== -1 ||
+          origin === undefined
+        ) {
+          callback(null, true);
+        } else {
+          callback(new Error('CORS request from untrusted origin'));
+        }
+      },
+      optionsSuccessStatus: 200,
+      credentials: true,
+    })
+  );
+
   app.use(apiRouter);
+
+  app.use(
+    /**
+     * Error Handler.
+     *
+     * @param {Error} err Error
+     * @param {CampaignRequest} req Request Object
+     * @param {*} res Response Object
+     * @param {*} next Next Object
+     */
+    // eslint-disable-next-line no-unused-vars
+    (err, req, res, next) => {
+      req.Logger.error(err.message);
+      res.status(500).send('Something broke!');
+    }
+  );
 
   return app;
 };
