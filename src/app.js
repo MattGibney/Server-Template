@@ -86,7 +86,6 @@ module.exports = (Config, daoFactory = null) => {
         ) {
           callback(null, true);
         } else {
-          console.log('Origin', origin);
           callback({ message: 'CORS request from untrusted origin' });
         }
       },

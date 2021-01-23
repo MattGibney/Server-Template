@@ -1,12 +1,13 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a description",
   "main": "bin/server.js",
   "scripts": {
     "start": "nodemon --exec NODE_ENV='develop' node bin/server.js",
-    "test": "nyc --reporter=lcov --reporter=text mocha -R spec --recursive && tsc",
-    "watch:test": "nodemon --exec npm t"
+    "generateDocs": "node dev-bin/generate-docs.js",
+    "test": "nyc --reporter=lcov --reporter=text mocha -R spec --recursive && tsc && npm run generateDocs",
+    "watch:test": "nodemon --ignore docs --exec npm t"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,7 @@
     "@types/node": "^14.14.22",
     "@types/sinon": "^9.0.10",
     "chai": "^4.2.0",
+    "chalk": "^4.1.0",
     "eslint": "^7.18.0",
     "eslint-plugin-jsdoc": "^31.0.8",
     "eslint-plugin-prettier": "^3.3.1",
@@ -26,6 +28,7 @@
     "mocha-eslint": "^7.0.0",
     "nodemon": "^2.0.7",
     "nyc": "^15.1.0",
+    "openapi-jsdoc": "0.0.2",
     "prettier": "^2.2.1",
     "sinon": "^9.2.3",
     "supertest": "^6.1.1",

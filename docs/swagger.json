@@ -1,0 +1,41 @@
+{
+  "info": {
+    "title": "backend",
+    "version": "1.0.0",
+    "description": "This is a description"
+  },
+  "openapi": "3.0.0",
+  "servers": [],
+  "paths": {
+    "/healthcheck": {
+      "get": {
+        "operationId": "healthcheck",
+        "description": "Provides the health of the application",
+        "tags": [
+          "/healthcheck"
+        ],
+        "responses": {
+          "200": {
+            "description": "Version of application",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "version": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "security": [],
+  "tags": [],
+  "externalDocs": {}
+}
