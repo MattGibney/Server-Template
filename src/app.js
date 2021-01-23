@@ -1,12 +1,10 @@
 /**
- * @typedef {import('../config/environment')} Config
- */
-
-/**
  * @typedef {object} _CampaignRequest
  * @property {string} id UUIDv4
- * @property {Config} Config
+ * @property {import('../config/environment')} Config
  * @property {import('winston').Logger} Logger
+ * @property {import('./modelFactory')} ModelFactory
+ * @property {import('./daoFactory')} DaoFactory
  */
 
 /**
@@ -18,9 +16,18 @@ const expressWinston = require('express-winston');
 const { v4: uuidv4 } = require('uuid');
 const cors = require('cors');
 
+const ModelFactory = require('./modelFactory');
+const DaoFactory = require('./daoFactory');
 const apiRouter = require('./router');
 
-module.exports = (Config) => {
+/**
+ * Application.
+ *
+ * @param {import('../config/environment')} Config -
+ * @param {import('./daoFactory')} [daoFactory] -
+ * @returns {express.Application} -
+ */
+module.exports = (Config, daoFactory = null) => {
   const app = express();
 
   const logger = winston.createLogger({
@@ -42,6 +49,8 @@ module.exports = (Config) => {
       req.id = requestId;
 
       req.Config = Config;
+      req.ModelFactory = ModelFactory;
+      req.DaoFactory = daoFactory ? daoFactory : new DaoFactory();
       req.Logger = logger.child({ requestId: requestId });
 
       res.setHeader('X-Request-ID', requestId);
@@ -77,7 +86,8 @@ module.exports = (Config) => {
         ) {
           callback(null, true);
         } else {
-          callback(new Error('CORS request from untrusted origin'));
+          console.log('Origin', origin);
+          callback({ message: 'CORS request from untrusted origin' });
         }
       },
       optionsSuccessStatus: 200,
@@ -98,8 +108,7 @@ module.exports = (Config) => {
      */
     // eslint-disable-next-line no-unused-vars
     (err, req, res, next) => {
-      req.Logger.error(err.message);
-      res.status(500).send('Something broke!');
+      res.status(500).json({ error: err.message });
     }
   );
 

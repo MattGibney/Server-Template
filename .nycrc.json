@@ -7,13 +7,10 @@
   "exclude": [
     "migrations", 
     "test", 
-    "coverage", 
-    "process.config.js",
-    "src/app.js",
-    "src/routes"
+    "coverage"
   ],
-  "branches": 0,
-  "lines": 0,
-  "functions": 0,
-  "statements": 0
+  "branches": 90,
+  "lines": 90,
+  "functions": 90,
+  "statements": 90
 }
